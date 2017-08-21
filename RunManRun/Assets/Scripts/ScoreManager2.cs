@@ -5,8 +5,9 @@ using UnityEngine;
 public class ScoreManager2 : MonoBehaviour {
 
 	public static ScoreManager2 instance;
-	public int score;
-	public int highScore;
+	public  int score;
+	public int bestScore;
+	int level;
 
 	void Awake () {
 		if (instance == null) {
@@ -17,9 +18,21 @@ public class ScoreManager2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		score = 0;
+		
 
-		PlayerPrefs.SetInt ("score",score);
+		level = UIManager2.instance.level;
+
+		if (level == 1) {
+			
+			score = 0;
+
+			if (!PlayerPrefs.HasKey ("SCORE")) {
+				PlayerPrefs.SetInt ("SCORE", score);
+			} 
+		
+		} else {
+			score = PlayerPrefs.GetInt ("SCORE");
+		}
 	}
 
 	// Update is called once per frame
@@ -39,7 +52,7 @@ public class ScoreManager2 : MonoBehaviour {
 	{
 		score += 20;
 	}
-	public void incrementScoreEnergyBall3 ()
+	public void incrementScoreEnergyBall3 ()//********check enerygyballs
 	{
 		score += 30;
 	}
@@ -49,18 +62,24 @@ public class ScoreManager2 : MonoBehaviour {
 		InvokeRepeating ("incrementScore",0.1f,0.5f);
 	}*/
 
+
+
+
 	public void stopScore()
 	{
+		//Debug.Log ("stopScore - should come here only at Level4");
 		//CancelInvoke ("incrementScore");
-		PlayerPrefs.SetInt ("score",score);
+		PlayerPrefs.SetInt ("SCORE",score);
 
-		if (PlayerPrefs.HasKey ("highScore")) {
-			if(score>PlayerPrefs.GetInt ("highScore"))
+		if (PlayerPrefs.HasKey ("BESTSCORE")) {
+			if(score>PlayerPrefs.GetInt ("BESTSCORE"))
 			{
-				PlayerPrefs.SetInt ("highScore",score);
+				PlayerPrefs.SetInt ("BESTSCORE",score);
 			}
-		} else {
-			PlayerPrefs.SetInt ("highScore",score);
+		} 
+		else {
+
+			PlayerPrefs.SetInt ("BESTSCORE",score);
 		}
 	}
 

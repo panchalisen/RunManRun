@@ -7,6 +7,7 @@ public class GameManager2 : MonoBehaviour {
 	public static GameManager2 instance;
 	public bool gameOver;
 
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;
@@ -28,6 +29,18 @@ public class GameManager2 : MonoBehaviour {
 
 		GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().startSpawning();
 	}
+
+	public void LevelCompleteSuccess() {
+		ScoreManager2.instance.stopScore ();
+		UIManager2.instance.loadNextLevel ();
+	}
+
+	public void LevelCompleteFail() {
+		UIManager2.instance.LevelOverFaliure ();
+
+	}
+
+
 	public void GameOver () {
 		UIManager2.instance.GameOver ();
 		ScoreManager2.instance.stopScore ();

@@ -12,77 +12,38 @@ public class UIManager2 : MonoBehaviour {
 	public GameObject gameOverPanel;
 	public GameObject scorePanelTop;
 	public GameObject btnStart;
-	public GameObject bg1,bg2,bg3;
+	//public GameObject bg1,bg2,bg3;
 
-	public Text score;
-	public Text highScore1;
-	public Text highScore2;
+
+	public Text pnlStartScore;
+	public Text pnlRestartScore;
+	public Text pnlRestartBestScore;
 	public Text scoreTextTop;
 	public GameObject userGuidanceText;
 
 	bool isMute;
+	public int level;
 
 	void Awake () {
 		if (instance == null) {
 			instance = this;
+			//Debug.Log("Awake...current level ="+level);
 		}
 	}
 
 	// Use this for initialization
 	void Start () {
+		if (level == 1) {
+			pnlStartScore.text = "BEST SCORE: " + 	PlayerPrefs.GetInt ("BESTSCORE");
+		} else {
+			pnlStartScore.text = "SCORE: "		+	PlayerPrefs.GetInt ("SCORE");
 
-		bg1.SetActive (false);
-		bg2.SetActive (false);
-		bg3.SetActive (false);
-
-
-		int rand= Random.Range (0, 3);
-
-		if (rand == 0) {
-			bg1.SetActive (true);	
-			destroyBg2 ();
-			destroyBg3 ();
 		}
-		else if(rand == 1)
-		{
-			bg2.SetActive (true);
-			destroyBg1 ();
-			destroyBg3 ();
-		}
-		else
-		{
-			bg3.SetActive (true);
-			destroyBg1 ();
-			destroyBg2 ();
-		}
+			
 
-
-
-		highScore1.text = "Best Score: "+PlayerPrefs.GetInt ("highScore");
 		resetVars ();
 	}
 
-	void destroyBg1()
-	{
-
-		foreach (Transform child in bg1.transform) {
-			GameObject.DestroyImmediate(child.gameObject);
-		}
-	}
-	void destroyBg2()
-	{
-
-		foreach (Transform child in bg2.transform) {
-			GameObject.DestroyImmediate(child.gameObject);
-		}
-	}
-	void destroyBg3()
-	{
-
-		foreach (Transform child in bg3.transform) {
-			GameObject.DestroyImmediate(child.gameObject);
-		}
-	}
 
 
 	void resetVars()
@@ -105,20 +66,33 @@ public class UIManager2 : MonoBehaviour {
 	}
 
 
-	public void GameOver () {
-		score.text = PlayerPrefs.GetInt ("score").ToString();
-		highScore2.text = PlayerPrefs.GetInt ("highScore").ToString();;
+	public void LevelOverFaliure () {
+		pnlRestartScore.text = PlayerPrefs.GetInt ("SCORE").ToString();
+		pnlRestartBestScore.text = PlayerPrefs.GetInt ("BESTSCORE").ToString();;
 		scorePanelTop.SetActive (false);
 		gameOverPanel.SetActive (true);
-		ZigZagPanel.GetComponent<Animator> ().Play ("GameOverPanelAnimation");
+	}
+
+
+		public void GameOver () {
+
+		pnlRestartScore.text = PlayerPrefs.GetInt ("SCORE").ToString();
+		pnlRestartBestScore.text = PlayerPrefs.GetInt ("BESTSCORE").ToString();;
+		scorePanelTop.SetActive (false);
+		gameOverPanel.SetActive (true);
+//		ZigZagPanel.GetComponent<Animator> ().Play ("GameOverPanelAnimation");
 
 	}
 
 
 	public void Reset () {
-		SceneManager.LoadScene (0);
 		resetVars ();
+		SceneManager.LoadScene (level-1);
+
 	}
+
+
+
 
 	public void Mute () {
 		isMute =!isMute;
@@ -126,7 +100,15 @@ public class UIManager2 : MonoBehaviour {
 
 
 	}
+	public void loadNextLevel()
+	{
+//		Debug.Log("loadNextLevel...current level ="+level);
 
+		if (level < 4) {
+			SceneManager.LoadScene (level);
+		}
+
+	}
 
 
 	// Update is called once per frame

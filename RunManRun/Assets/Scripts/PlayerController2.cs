@@ -6,16 +6,16 @@ public class PlayerController2 : MonoBehaviour {
 
 	Rigidbody rb;
 	Animator anim;
-	public float speed;
+ float speed;
 
 
 	bool started;
 	Vector3 target_point;
 	Vector3 currentLoc;
-	Vector3 prevLoc;
-	bool gameOver;
+	//Vector3 prevLoc;
+	//bool gameOver;
 	public AudioManager2 am;
-
+	int level;
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody> ();
@@ -24,14 +24,41 @@ public class PlayerController2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speed = 9f;
-		started = false;
-		//rb.velocity = Vector3.forward * speed;
 
+
+		level = UIManager2.instance.level;
+		//speed = 9f;
+		started = false;
+
+		switch (level) {
+		case 1:
+			speed = 10f;
+			break;
+
+		case 2:
+			speed = 11f;
+			break;
+
+		case 3:
+			speed = 12f;
+			break;
+
+		case 4:
+			speed = 13f;
+			break;
+		}
+
+
+		//rb.velocity = Vector3.forward * speed;
+		if (am.bgMusic.isPlaying) {
+			am.bgMusic.Stop();
+		}
+	
+			
 	}
 
 
-	Vector3 moveDirection;
+	//Vector3 moveDirection;
 
 
 
@@ -39,23 +66,28 @@ public class PlayerController2 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		moveDirection = Vector3.zero;
-		prevLoc = transform.position;
+	//	moveDirection = Vector3.zero;
+		//prevLoc = transform.position;
 
 
 
 		if (!Physics.Raycast (transform.position, Vector3.down, 1f)) {
-			gameOver = true;
+			//gameOver = true;
 			rb.velocity = new Vector3 (0, -25f, 0);
 			Camera.main.GetComponent <CameraFollow2> ().gameOver = true;	
-			GameManager2.instance.GameOver ();
-			am.bgMusic.Stop();
+			GameManager2.instance.LevelCompleteFail();
+			am.bgMusic.Stop ();
 		}
 
-		if ((GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2> ().platformCount % 10) == 0)
-			speed += 0.05f;
 
-		if (Input.GetMouseButtonDown (0)) {
+
+
+		//if ((GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2> ().platformCount % 10) == 0) {
+			//speed += 0.025f;
+		//}
+
+
+				if (Input.GetMouseButtonDown (0)) {
 
 
 
@@ -65,6 +97,7 @@ public class PlayerController2 : MonoBehaviour {
 				rb.velocity = new Vector3 (0,0,speed);
 				//rb.velocity = Vector3.forward * speed;	
 				started = true;
+				Debug.Log ("level- "+level+";speed- "+speed);
 				GameManager2.instance.GameStart ();
 			} 
 			else {
@@ -117,6 +150,20 @@ public class PlayerController2 : MonoBehaviour {
 			Destroy (col.gameObject);
 			ScoreManager2.instance.incrementScoreEnergyBall3 ();
 
+
+		}
+		if (col.gameObject.tag == "PLATFORMEND") {
+
+			anim.SetTrigger ("goRun");
+			rb.velocity = new Vector3 (0,0,0);
+
+
+			if (level < 4) {
+				GameManager2.instance.LevelCompleteSuccess ();//*stiill problem if u remove this line
+			} else if (level == 4) {
+				GameManager2.instance.GameOver ();
+			}
+				
 
 		}
 		UIManager2.instance.updateScore ();
