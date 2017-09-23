@@ -14,7 +14,7 @@ public class PlatformSpawner2 : MonoBehaviour {
 	public GameObject energyBalls1;
 	public GameObject energyBalls2;
 	public GameObject energyBalls3;
-
+	public GameObject energyBalls4;
 
 	Vector3 lastPos;
 	bool lastPosIsSpawnedZ;
@@ -63,8 +63,13 @@ public class PlatformSpawner2 : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (GameManager2.instance.gameOver==true)
-			CancelInvoke ("SpawnPlatforms");;
+		if (GameManager2.instance.gameOver)
+			stopSpawning ();
+	}
+
+	public void stopSpawning()
+	{
+		CancelInvoke ("SpawnPlatforms");
 	}
 
 
@@ -91,20 +96,20 @@ public class PlatformSpawner2 : MonoBehaviour {
 		switch (level) {
 		//6:4:3:2 ..60
 		case 1:
-			if (platformCount == 20) 
+			if (platformCount == 10) 
 				loadLastPlatform ();
 			break;
 		case 2:
-			if (platformCount == 30) 
+			if (platformCount == 10) 
 				loadLastPlatform ();
 			break;
 		case 3:
-			if (platformCount == 40) 
+			if (platformCount == 10) 
 				loadLastPlatform ();
 			break;
 
 		case 4:
-			if (platformCount == 50) 
+			if (platformCount == 10) 
 				loadLastPlatform ();
 			break;
 
@@ -175,24 +180,34 @@ public class PlatformSpawner2 : MonoBehaviour {
 	}
 
 
-
 	void spawnEnergyBalls(Vector3 pos)
 	{
-		if (level<4) {
+
+
+		if (level==1) {
 			if (rand < 3) {
 				Instantiate (energyBalls1, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
 			}
 		}
 
-		if (level>4) {
-			if (rand < 2) {
-				Instantiate (energyBalls3, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+		else if (level==2) {
+			if (rand < 3) {
+				Instantiate (energyBalls2, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
 			}
 		}
 
-		if (level>2) {
+		else if (level==3) {
+			if (rand > 2) {
+				Instantiate (energyBalls3, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+			}
+			//else if (rand == 1) {
+			//	Instantiate (energyBalls1, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+			//}
+		}
+
+		else if (level==4) {
 			if (rand >3) 
-				Instantiate (energyBalls2, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+				Instantiate (energyBalls4, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
 		}
 
 

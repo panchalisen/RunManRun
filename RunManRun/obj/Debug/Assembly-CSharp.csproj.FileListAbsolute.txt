@@ -60,3 +60,5 @@ D:\Android\3DRunnerRepo\RunManRun\Temp\bin\Debug\UnityEngine.VR.xml
 D:\Android\3DRunnerRepo\RunManRun\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\Android\3DRunnerRepo\RunManRun\obj\Debug\Assembly-CSharp.dll
 D:\Android\3DRunnerRepo\RunManRun\obj\Debug\Assembly-CSharp.pdb
+D:\Android\3DRunnerRepo\RunManRun\Temp\bin\Debug\UnityEngine.Advertisements.dll
+D:\Android\3DRunnerRepo\RunManRun\Temp\bin\Debug\UnityEngine.Advertisements.xml

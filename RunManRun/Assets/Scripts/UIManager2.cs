@@ -10,10 +10,18 @@ public class UIManager2 : MonoBehaviour {
 
 	public GameObject ZigZagPanel;
 	public GameObject gameOverPanel;
-	public GameObject scorePanelTop;
-	public GameObject btnStart;
-	//public GameObject bg1,bg2,bg3;
+	//public GameObject scorePanelTop1;
+	public GameObject rewardedVideoPanel;
+	public GameObject confirmationPanel;
+	public GameObject gameCompletePanel;
 
+	public GameObject btnStart;
+	public GameObject btnViewRewardedVideo;
+	//public GameObject btnAdLabel;
+	public GameObject btnMute;
+	//public GameObject bg1,bg2,bg3;
+	public Sprite SoundOn;
+	public Sprite SoundOff;
 
 	public Text pnlStartScore;
 	public Text pnlRestartScore;
@@ -23,24 +31,39 @@ public class UIManager2 : MonoBehaviour {
 
 	bool isMute;
 	public int level;
-
+	string initText;
 	void Awake () {
 		if (instance == null) {
 			instance = this;
-			//Debug.Log("Awake...current level ="+level);
+
+			//Debug.Log("Awake...current level ="+level); //awake always called on level reload
 		}
 	}
 
 	// Use this for initialization
 	void Start () {
+
+		//Debug.Log ("isMute: " + isMute);
+		if (!PlayerPrefs.HasKey ("BESTSCORE")) {
+			initText = "BEST SCORE: 0";
+		} else {
+
+			//if(PlayerPrefs.GetInt ("SCORE")>0)
+				//initText = "SCORE: "+PlayerPrefs.GetInt ("SCORE");
+			//else
+				initText = "BEST SCORE: "+PlayerPrefs.GetInt ("BESTSCORE");
+		}
+
 		if (level == 1) {
-			pnlStartScore.text = "BEST SCORE: " + 	PlayerPrefs.GetInt ("BESTSCORE");
+			//pnlStartScore.text = "BEST SCORE: " + 	PlayerPrefs.GetInt ("BESTSCORE");
+			pnlStartScore.text = initText;
 		} else {
 			pnlStartScore.text = "SCORE: "		+	PlayerPrefs.GetInt ("SCORE");
 
 		}
-			
-
+	rewardedVideoPanel.SetActive (false);
+		confirmationPanel.SetActive (false);
+		UnityAdManager.instance.SetAdAdBtnLabels (level);
 		resetVars ();
 	}
 
@@ -48,37 +71,85 @@ public class UIManager2 : MonoBehaviour {
 
 	void resetVars()
 	{
+		
 		isMute = false;
+
 	}
 
 	public void GameStart () {
-
+		UnityAdManager.instance.SetAdAdBtnLabels (level);
 		btnStart.SetActive (false);
+		btnMute.SetActive (false);
 		userGuidanceText.SetActive (false);
 		ZigZagPanel.GetComponent<Animator> ().Play ("MoveUp");
-		scorePanelTop.SetActive (true);
+		//scorePanelTop.SetActive (true);
+		rewardedVideoPanel.SetActive (false);	
+		confirmationPanel.SetActive (false);
 
 	}
 
-	public void updateScore()
+
+	public void updateScore1()
 	{
 		scoreTextTop.text = "SCORE: "+ScoreManager2.instance.score;
 	}
 
 
+	public void ShowConfirmationPanel (string message) {
+		//rewardedVideoPanel.SetActive (false);	
+		confirmationPanel.SetActive (true);
+		confirmationPanel.GetComponentInChildren<Text> ().text = message;
+
+	}
+
+	public void HideConfirmationPanel (string message) {
+
+
+	}
+
+
+
 	public void LevelOverFaliure () {
 		pnlRestartScore.text = PlayerPrefs.GetInt ("SCORE").ToString();
 		pnlRestartBestScore.text = PlayerPrefs.GetInt ("BESTSCORE").ToString();;
-		scorePanelTop.SetActive (false);
+		//scorePanelTop.SetActive (false);
 		gameOverPanel.SetActive (true);
+
+		//Debug.Log ("LEVEL_FAILED_COUNT-"+PlayerPrefs.GetInt ("LEVEL_FAILED_COUNT"));
+
+
+		if (UnityAdManager.instance.ShowRewardedVideoPanel ()) {
+			rewardedVideoPanel.SetActive (true);
+
+			Text labelAd =rewardedVideoPanel.GetComponentInChildren<Text>();
+			labelAd.text = UnityAdManager.instance.GetAdText ();
+		}
+
 	}
 
+	public void ShowRewardedVideoOnClick () {
+		//Debug.Log ("ShowRewardedVideoOnClick UIManager");
+		UnityAdManager.instance.ShowRewardedVideoAd ();
+	}
+
+	public void GameComplete () {
+		
+		Text[] gameOver =gameCompletePanel.GetComponentsInChildren<Text>();
+		gameOver[5].text = PlayerPrefs.GetInt ("BESTSCORE").ToString();;
+		gameOver[3].text = PlayerPrefs.GetInt ("SCORE").ToString();
+
+
+		//scorePanelTop.SetActive (false);
+		rewardedVideoPanel.SetActive (false);	
+		confirmationPanel.SetActive (false);
+		gameCompletePanel.SetActive (true);
+	}
 
 		public void GameOver () {
 
 		pnlRestartScore.text = PlayerPrefs.GetInt ("SCORE").ToString();
 		pnlRestartBestScore.text = PlayerPrefs.GetInt ("BESTSCORE").ToString();;
-		scorePanelTop.SetActive (false);
+		//scorePanelTop.SetActive (false);
 		gameOverPanel.SetActive (true);
 //		ZigZagPanel.GetComponent<Animator> ().Play ("GameOverPanelAnimation");
 
@@ -86,6 +157,7 @@ public class UIManager2 : MonoBehaviour {
 
 
 	public void Reset () {
+		
 		resetVars ();
 		SceneManager.LoadScene (level-1);
 
@@ -95,10 +167,16 @@ public class UIManager2 : MonoBehaviour {
 
 
 	public void Mute () {
+	//	Debug.Log ("mute button clicked");
 		isMute =!isMute;
 		AudioListener.volume = isMute ? 0 : 1;
-
-
+		btnMute.GetComponent<Image> ().sprite = isMute ? SoundOff : SoundOn;
+		Debug.Log ("-isMute: " + isMute);
+		/*if (isMute)
+			btnMute.GetComponent<Image> ().sprite = SoundOff;
+		else
+			btnMute .GetComponent<Image> ().sprite = SoundOn;*/
+		
 	}
 	public void loadNextLevel()
 	{
@@ -116,5 +194,8 @@ public class UIManager2 : MonoBehaviour {
 
 	}
 
-
+	public void QuitGame()
+	{
+		Application.Quit();
+	}
 }

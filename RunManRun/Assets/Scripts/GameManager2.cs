@@ -32,14 +32,23 @@ public class GameManager2 : MonoBehaviour {
 
 	public void LevelCompleteSuccess() {
 		ScoreManager2.instance.stopScore ();
+		UnityAdManager.instance.ShowNormalVideoAd ();
 		UIManager2.instance.loadNextLevel ();
+
 	}
 
 	public void LevelCompleteFail() {
+		UnityAdManager.instance.UpdateLevelFailureCount ();
 		UIManager2.instance.LevelOverFaliure ();
+		GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().stopSpawning();
 
 	}
 
+
+	public void GameComplete(){
+		ScoreManager2.instance.stopScore ();
+		UIManager2.instance.GameComplete ();
+	}
 
 	public void GameOver () {
 		UIManager2.instance.GameOver ();

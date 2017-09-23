@@ -7,7 +7,7 @@ public class CameraFollow2 : MonoBehaviour {
 	[SerializeField]
 	Transform player;
 	Vector3 offset;
-	public bool gameOver;
+	[HideInInspector] public bool gameOrLevelOver;
 
 	[SerializeField]
 	float smoothRate;
@@ -16,12 +16,12 @@ public class CameraFollow2 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		offset = player.position - transform.position;
-		gameOver = false;
+		gameOrLevelOver = false;
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (!gameOver) {
+		if (!gameOrLevelOver) {
 			Follow ();
 		}
 

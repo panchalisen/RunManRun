@@ -10,8 +10,10 @@ public class ScoreManager2 : MonoBehaviour {
 	int level;
 
 	void Awake () {
+		
 		if (instance == null) {
 			instance = this;
+
 		}
 	}
 
@@ -21,7 +23,7 @@ public class ScoreManager2 : MonoBehaviour {
 		
 
 		level = UIManager2.instance.level;
-
+		Debug.Log ("----------Level "+level+" Starts----------");
 		if (level == 1) {
 			
 			score = 0;
@@ -35,28 +37,46 @@ public class ScoreManager2 : MonoBehaviour {
 		}
 	}
 
+	public void resetPref ()
+	{
+		PlayerPrefs.DeleteKey ("SCORE");
+		Debug.Log ("score key removed");
+	}
+
+
 	// Update is called once per frame
 	void Update () {
 
 	}
 
-	public void incrementScore ()
+	public void incrementScore (int count)
 	{
-		score += 1;
+		score += count;
 	}
+
 	public void incrementScoreEnergyBall1 ()
 	{
-		score += 10;
-	}
-	public void incrementScoreEnergyBall2 ()
-	{
+		
 		score += 20;
+		Debug.Log ("score (+20)-"+ScoreManager2.instance.score);
+	}
+	public void incrementScoreEnergyBall2 ()//********check enerygyballs
+	{
+		
+		score += 30;
+		Debug.Log ("score (+30)-"+ScoreManager2.instance.score);
 	}
 	public void incrementScoreEnergyBall3 ()//********check enerygyballs
 	{
-		score += 30;
-	}
 
+		score += 50;
+		Debug.Log ("score (+50)-"+ScoreManager2.instance.score);
+	}
+	public void incrementScoreEnergyBall4 ()
+	{
+		score += 100;
+		Debug.Log ("score (+100)-"+ScoreManager2.instance.score);
+	}
 	/*public void startScore ()
 	{
 		InvokeRepeating ("incrementScore",0.1f,0.5f);
@@ -67,7 +87,6 @@ public class ScoreManager2 : MonoBehaviour {
 
 	public void stopScore()
 	{
-		//Debug.Log ("stopScore - should come here only at Level4");
 		//CancelInvoke ("incrementScore");
 		PlayerPrefs.SetInt ("SCORE",score);
 
