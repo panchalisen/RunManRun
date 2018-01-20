@@ -26,15 +26,17 @@ public class ScoreManager2 : MonoBehaviour {
 		Debug.Log ("----------Level "+level+" Starts----------");
 		if (level == 1) {
 			
-			score = 0;
+			//score = 0;
 
 			if (!PlayerPrefs.HasKey ("SCORE")) {
-				PlayerPrefs.SetInt ("SCORE", score);
+				PlayerPrefs.SetInt ("SCORE", 0);
 			} 
 		
 		} else {
-			score = PlayerPrefs.GetInt ("SCORE");
+			//score = PlayerPrefs.GetInt ("SCORE");
 		}
+		score = PlayerPrefs.GetInt ("SCORE");
+		Debug.Log ("score- "+score);
 	}
 
 	public void resetPref ()
@@ -51,10 +53,30 @@ public class ScoreManager2 : MonoBehaviour {
 
 	public void incrementScore (int count)
 	{
+		//Debug.Log("Old score-" + score);
 		score += count;
+		//Debug.Log ("After adding "+count+" score incremented to-"+score);
 	}
 
-	public void incrementScoreEnergyBall1 ()
+	public void incrementScoreAfterAd (int count)
+	{
+		int tempScore = 0;
+
+		if (!PlayerPrefs.HasKey ("SCORE")) {
+			
+			score = count;
+		} else {
+
+			score = PlayerPrefs.GetInt ("SCORE");
+			score += count;
+		}
+
+		Debug.Log("Old score-" + score);
+
+		Debug.Log ("After adding "+count+" score incremented to-"+score);
+	}
+
+	/*public void incrementScoreEnergyBall1 ()
 	{
 		
 		score += 20;
@@ -76,7 +98,7 @@ public class ScoreManager2 : MonoBehaviour {
 	{
 		score += 100;
 		Debug.Log ("score (+100)-"+ScoreManager2.instance.score);
-	}
+	}*/
 	/*public void startScore ()
 	{
 		InvokeRepeating ("incrementScore",0.1f,0.5f);
@@ -89,6 +111,7 @@ public class ScoreManager2 : MonoBehaviour {
 	{
 		//CancelInvoke ("incrementScore");
 		PlayerPrefs.SetInt ("SCORE",score);
+		Debug.Log ("score LOCKED to-"+score);
 
 		if (PlayerPrefs.HasKey ("BESTSCORE")) {
 			if(score>PlayerPrefs.GetInt ("BESTSCORE"))

@@ -18,16 +18,12 @@ public class GameManager2 : MonoBehaviour {
 		gameOver = false;
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
 
 	public void GameStart () {
 
 		UIManager2.instance.GameStart ();
 
-		GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().startSpawning();
+		//GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().startSpawning();
 	}
 
 	public void LevelCompleteSuccess() {
@@ -40,14 +36,15 @@ public class GameManager2 : MonoBehaviour {
 	public void LevelCompleteFail() {
 		UnityAdManager.instance.UpdateLevelFailureCount ();
 		UIManager2.instance.LevelOverFaliure ();
-		GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().stopSpawning();
+	//	GameObject.Find ("PlatformSpawner").GetComponent<PlatformSpawner2>().stopSpawning();
 
 	}
 
 
 	public void GameComplete(){
 		ScoreManager2.instance.stopScore ();
-		UIManager2.instance.GameComplete ();
+		UIManager2.instance.loadNextLevel ();
+		//UIManager2.instance.GameComplete ();
 	}
 
 	public void GameOver () {

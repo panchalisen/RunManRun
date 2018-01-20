@@ -11,10 +11,18 @@ public class PlatformSpawner2 : MonoBehaviour {
 	public GameObject platform;
 	public GameObject platformEnd;
 
-	public GameObject energyBalls1;
-	public GameObject energyBalls2;
-	public GameObject energyBalls3;
-	public GameObject energyBalls4;
+	public GameObject food1;//french fries
+	public GameObject food2;//ice cream cone
+	public GameObject food3;//muffin
+
+	public GameObject food4;//burger
+	public GameObject food5;//toast
+	public GameObject food6;//rice bowl
+	public GameObject food7;//avocado
+
+	public GameObject food8;//bread
+
+
 
 	Vector3 lastPos;
 	bool lastPosIsSpawnedZ;
@@ -23,8 +31,8 @@ public class PlatformSpawner2 : MonoBehaviour {
 	float platformSizeZ;
 
 
-	public bool gameOver;
-	public int platformCount;
+	[HideInInspector]public bool gameOver;
+	[HideInInspector]public int platformCount;
 
 	int rand;
 	int level;
@@ -48,14 +56,43 @@ public class PlatformSpawner2 : MonoBehaviour {
 		platformSizeZ = platform.transform.localScale.z;
 
 
-		for (int i = 1; i <= 10; i++) {
-			SpawnPlatforms ();
+		//method1
+		//for (int i = 1; i <= 10; i++) {
+		//	SpawnPlatforms ();
+		//}
+
+		int limit = 0;
+
+		switch (level) {
+		case 1:
+			limit = 30;
+			break;
+		case 2:
+			limit = 40;
+			break;
+		case 3:
+			limit = 50;
+			break;
+
+		case 4:
+			limit = 50;
+			break;
+
 		}
 
 
+
+		//method2
+		for (int i = 1; i <= limit; i++) {
+			SpawnPlatforms ();
+		}
+		platformCount = limit;
+		loadLastPlatform ();
+		Debug.Log("Loaded last platform");
+
 	}
 
-	public void startSpawning()
+/*	public void startSpawning()
 	{
 
 		InvokeRepeating ("SpawnPlatforms",0.1f,0.2f);
@@ -71,7 +108,7 @@ public class PlatformSpawner2 : MonoBehaviour {
 	{
 		CancelInvoke ("SpawnPlatforms");
 	}
-
+*/
 
 	void SpawnPlatforms () {
 
@@ -83,37 +120,42 @@ public class PlatformSpawner2 : MonoBehaviour {
 
 		if (rand < 3) {
 			SpawnX ();
+			//SpawnZ ();
 
 		} else if (rand >= 3) {
 			SpawnZ ();
+			//SpawnX ();
 
 		}
 
 
 		platformCount += 1;
 
+		int x = 2;//6:4:3:2.. ..60
+//		Debug.Log ("Count="+platformCount);
 
-		switch (level) {
-		//6:4:3:2 ..60
+		/*switch (level) {
 		case 1:
-			if (platformCount == 10) 
+			if (platformCount == 10*x) 
 				loadLastPlatform ();
 			break;
 		case 2:
-			if (platformCount == 10) 
+			if (platformCount == 15*x) 
 				loadLastPlatform ();
 			break;
 		case 3:
-			if (platformCount == 10) 
+			if (platformCount == 20 * x) {
 				loadLastPlatform ();
+			}
+				
 			break;
 
 		case 4:
-			if (platformCount == 10) 
+			if (platformCount == 5*x) 
 				loadLastPlatform ();
 			break;
 
-		}
+		}*/
 			
 	}
 
@@ -123,7 +165,8 @@ public class PlatformSpawner2 : MonoBehaviour {
 		pos.x += platformSizeX;
 		platformEnd.transform.position = pos;
 		//Instantiate (platformEnd, pos,  Quaternion.Euler(0,90,0));
-		CancelInvoke ("SpawnPlatforms");
+		//CancelInvoke ("SpawnPlatforms");
+		Debug.Log("Loaded last platform");
 	}
 
 
@@ -150,7 +193,7 @@ public class PlatformSpawner2 : MonoBehaviour {
 			
 		lastPos = pos;
 		Instantiate (platform, pos,  Quaternion.Euler(0,90,0));
-		spawnEnergyBalls (pos);	
+		SpawnFood (pos);	
 	}
 
 
@@ -175,43 +218,66 @@ public class PlatformSpawner2 : MonoBehaviour {
 
 		lastPos = pos;
 		Instantiate (platform, pos,  Quaternion.identity);
-		spawnEnergyBalls (pos);
+		SpawnFood (pos);
 
 	}
 
 
-	void spawnEnergyBalls(Vector3 pos)
+
+	void SpawnFood(Vector3 pos)
 	{
 
+		rand= Random.Range (1, 7);
+		int rand2 = Random.Range (1, 3);
 
-		if (level==1) {
-			if (rand < 3) {
-				Instantiate (energyBalls1, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+		int scaleFactor = 12;
+	
+		switch (rand) {
+		case 1:
+			var food = Instantiate (food1, new Vector3 (pos.x, pos.y + 4, pos.z), Quaternion.identity) as GameObject;
+
+			if ( rand2>1) {
+				food = Instantiate (food2, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
 			}
-		}
+			food.transform.localScale = new Vector3(scaleFactor,scaleFactor,scaleFactor);
+			break;
+		
+		case 2:
+			
+			if (rand2 < 2) {
+				
+				food = Instantiate (food3, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
 
-		else if (level==2) {
-			if (rand < 3) {
-				Instantiate (energyBalls2, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+			} else {
+				food = Instantiate (food4, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
 			}
-		}
+			food.transform.localScale = new Vector3(scaleFactor,scaleFactor,scaleFactor);
+			break;
 
-		else if (level==3) {
-			if (rand > 2) {
-				Instantiate (energyBalls3, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
+		case 3:
+			if (rand2 < 2) {
+				food = Instantiate (food5, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
+
+			} else {
+				food = Instantiate (food6, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
 			}
-			//else if (rand == 1) {
-			//	Instantiate (energyBalls1, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
-			//}
-		}
+			food.transform.localScale = new Vector3(scaleFactor,scaleFactor,scaleFactor);	
+			break;
 
-		else if (level==4) {
-			if (rand >3) 
-				Instantiate (energyBalls4, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity);
-		}
+		case 4:
+			if (rand2 < 2) {
+				food = Instantiate (food7, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
 
+			} else {
+				food = Instantiate (food8, new Vector3(pos.x,pos.y+4,pos.z), Quaternion.identity)as GameObject;
+			}
+			food.transform.localScale = new Vector3(scaleFactor,scaleFactor,scaleFactor);
+			break;
+
+		}
 
 
 	}
+
 
 }

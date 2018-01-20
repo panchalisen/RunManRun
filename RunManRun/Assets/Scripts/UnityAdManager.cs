@@ -14,7 +14,7 @@ public class UnityAdManager : MonoBehaviour {
 	int level;
 	int rand;
 	string userMessage;
-
+	public bool isMute;//shouldnt be here though
 	private string gameId = "";
 
 	void Awake () {
@@ -28,9 +28,9 @@ public class UnityAdManager : MonoBehaviour {
 		}else {
 			Destroy (this.gameObject);
 		}
-			
+		isMute = false;
+		AudioListener.pause = false;
 	}
-
 
 
 
@@ -56,7 +56,7 @@ public class UnityAdManager : MonoBehaviour {
 
 	public void SetAdAdBtnLabels(int level){
 	 level = UIManager2.instance.level;
-
+		//Debug.Log ("----SetAdAdBtnLabels-----"+level);
 		switch (level) {
 		case 1:
 			AssignLabelAdBtnLevel1();
@@ -88,6 +88,7 @@ public class UnityAdManager : MonoBehaviour {
 	public void SetPrefVars()
 	{
 		PlayerPrefs.SetInt ("LEVEL_FAILED_COUNT",0);
+		PlayerPrefs.SetInt ("LEVEL_FAILED_COUNT",0);
 		//Debug.Log ("LEVEL_FAILED_COUNT.set to 0");
 		PlayerPrefs.SetInt ("SCORE",0);
 		Debug.Log ("SCORE.set to 0");
@@ -102,6 +103,8 @@ public class UnityAdManager : MonoBehaviour {
 
 
 	public void ShowRewardedVideoAd () {
+		Debug.Log ("----ShowRewardedVideoAd-----");
+
 		if (Advertisement.IsReady ("rewardedVideo")) {
 			Advertisement.Show ("rewardedVideo",new ShowOptions {resultCallback = RewardedAdCallbackHandler});
 		}
@@ -117,6 +120,8 @@ public class UnityAdManager : MonoBehaviour {
 
 	void performAction()
 	{
+		level = UIManager2.instance.level;
+		//Debug.Log ("----performAction-----"+level);
 		switch (level) {
 
 		case 1:
@@ -143,7 +148,7 @@ public class UnityAdManager : MonoBehaviour {
 			switch (result) {
 
 			case ShowResult.Finished:
-				ScoreManager2.instance.incrementScore (level*10);
+			ScoreManager2.instance.incrementScoreAfterAd (level*10);
 				ScoreManager2.instance.stopScore ();
 				//userMessage = (level*10)+" points have been added";
 				//UIManager2.instance.ShowConfirmationPanel (userMessage);
@@ -184,7 +189,7 @@ public class UnityAdManager : MonoBehaviour {
 			userMessage = "No points added.";
 			break;
 		}
-		//Debug.Log (userMessage);
+		Debug.Log (userMessage);
 		UIManager2.instance.ShowConfirmationPanel (userMessage);
 	}
 
@@ -230,19 +235,22 @@ public class UnityAdManager : MonoBehaviour {
 	}
 
 	void performActionLevel1(){
+
+
 		switch (rand) {
 		case 0:
-			ScoreManager2.instance.incrementScore (10);
+			ScoreManager2.instance.incrementScoreAfterAd (10);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 1:
-			ScoreManager2.instance.incrementScore (20);
+			ScoreManager2.instance.incrementScoreAfterAd (20);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 2:
-			ScoreManager2.instance.incrementScore (30);
+			
+			ScoreManager2.instance.incrementScoreAfterAd (30);
 			ScoreManager2.instance.stopScore ();
 			break;
 
@@ -291,17 +299,17 @@ public class UnityAdManager : MonoBehaviour {
 	void performActionLevel2(){
 		switch (rand) {
 		case 0:
-			ScoreManager2.instance.incrementScore (40);
+			ScoreManager2.instance.incrementScoreAfterAd (40);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 1:
-			ScoreManager2.instance.incrementScore (20);
+			ScoreManager2.instance.incrementScoreAfterAd (20);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 2:
-			ScoreManager2.instance.incrementScore (30);
+			ScoreManager2.instance.incrementScoreAfterAd (30);
 			ScoreManager2.instance.stopScore ();
 			break;
 
@@ -337,17 +345,17 @@ public class UnityAdManager : MonoBehaviour {
 	void performActionLevel3(){
 		switch (rand) {
 		case 0:
-			ScoreManager2.instance.incrementScore (40);
+			ScoreManager2.instance.incrementScoreAfterAd (40);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 1:
-			ScoreManager2.instance.incrementScore (50);
+			ScoreManager2.instance.incrementScoreAfterAd (50);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 2:
-			ScoreManager2.instance.incrementScore (30);
+			ScoreManager2.instance.incrementScoreAfterAd (30);
 			ScoreManager2.instance.stopScore ();
 			break;
 
@@ -382,17 +390,17 @@ public class UnityAdManager : MonoBehaviour {
 	void performActionLevel4(){
 		switch (rand) {
 		case 0:
-			ScoreManager2.instance.incrementScore (40);
+			ScoreManager2.instance.incrementScoreAfterAd (40);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 1:
-			ScoreManager2.instance.incrementScore (50);
+			ScoreManager2.instance.incrementScoreAfterAd (50);
 			ScoreManager2.instance.stopScore ();
 			break;
 
 		case 2:
-			ScoreManager2.instance.incrementScore (60);
+			ScoreManager2.instance.incrementScoreAfterAd (60);
 			ScoreManager2.instance.stopScore ();
 			break;
 

@@ -5,18 +5,10 @@ using UnityEngine;
 public class AudioManager2 : MonoBehaviour {
 
 
+	public AudioSource introMusic;
 	public AudioSource bgMusic;
 	public AudioSource audioCollision1;
-	public AudioSource audioCollision2;
-	public AudioSource audioCollision3;
+	public AudioSource audioScream;
+	public AudioSource audioHappyScream;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
 }
